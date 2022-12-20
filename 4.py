@@ -6,4 +6,4 @@ def decimal_to_digit(digit: int) -> str:
     return binary
 
 
-print(decimal_to_digit(46))
+print(decimal_to_digit(100))
