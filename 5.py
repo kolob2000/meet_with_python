@@ -7,7 +7,6 @@ def list_shuffle(_list: list):
 
     for _ in range(len(_list)):
         position = random.randint(0, len(temp_list) - 1)
-        print(position)
         shuffled_list.append(temp_list.pop(position))
     return shuffled_list
 
