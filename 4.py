@@ -6,4 +6,5 @@ def decimal_to_digit(digit: int) -> str:
     return binary
 
 
-print(decimal_to_digit(100))
+number = int(input('input integer number for converting - '))
+print(decimal_to_digit(number))

@@ -2,7 +2,7 @@ import decimal as d
 
 row_array = list(map(lambda x: round(x % int(x), 2), [1.1, 1.2, 3.1, 5, 10.01]))
 
-
+filter
 def insertion_sort(array: list) -> list:
     for i in range(len(array) - 1):
         j = i + 1

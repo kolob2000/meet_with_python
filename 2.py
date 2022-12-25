@@ -11,6 +11,5 @@ def sum_of_pare(array: list[int]) -> list[int]:
     return accumulator
 
 
-help(sum_of_pare)
 print(sum_of_pare([2, 3, 4, 5, 6]))
 print(sum_of_pare([2, 3, 5, 6]))
