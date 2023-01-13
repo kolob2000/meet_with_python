@@ -5,7 +5,8 @@ def polynomial_gen(k: int) -> str:
     polynomial = []
     for i in range(k, 0, -1):
         var = random.randint(0, 20)
-        if not var: continue
+        if not var:
+            continue
         var = var if var != 1 else ''
         if i != 1:
             polynomial.append(f'{var}x^{i}')

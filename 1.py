@@ -5,4 +5,4 @@ def bbp_formula(d):
 
 
 if __name__ == '__main__':
-    print(bbp_formula(0.001))
+    print(bbp_formula(0.0001))
