@@ -240,3 +240,6 @@ cython_debug/
 .idea/
 
 file.py
+file2.py
+text.txt
+identifier.sqlite
