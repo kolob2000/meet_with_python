@@ -45,5 +45,10 @@ def main():
                     m.delete_row(cur, con, idx)
                     print('Запись удалена.')
                     v.continue_question()
+            case '6':
+                db = m.select_all(cur)
+                m.export_to_csv(db)
+                print('Экспорт завершен.')
+                v.continue_question()
             case _:
                 print("Неверный выбор!")

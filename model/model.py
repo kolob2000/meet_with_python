@@ -1,3 +1,4 @@
+import csv
 import sqlite3
 
 
@@ -40,3 +41,12 @@ def add_row(cur, row, con):
 def delete_row(cur, con, idx):
     cur.execute(f'DELETE FROM phonebook WHERE id = {idx}')
     con.commit()
+
+
+def export_to_csv(db):
+    with open('phonebook.csv', 'w', newline='', encoding='utf-8') as f:
+        field_names = ['Имя', 'Номер телефона', 'Город']
+        writer = csv.DictWriter(f, fieldnames=field_names)
+        for row in db.fetchall():
+            writer.writerow({'Имя': row[1], 'Номер телефона': row[2], 'Город': row[3]})
+
