@@ -16,10 +16,6 @@ def create_table(cur, con):
         phone TEXT UNIQUE NOT NULL,
         city TEXT DEFAULT NULL)
     ''')
-    # cur.execute('''
-    # INSERT INTO phonebook (name, phone, city) VALUES ("андрей иванов", "8999399999", "москва");
-    # ''')
-    # con.commit()
 
 
 def select_all(cur):
@@ -49,4 +45,3 @@ def export_to_csv(db):
         writer = csv.DictWriter(f, fieldnames=field_names)
         for row in db.fetchall():
             writer.writerow({'Имя': row[1], 'Номер телефона': row[2], 'Город': row[3]})
-
