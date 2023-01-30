@@ -1,8 +1,36 @@
 import os
 
+from model.structures import Employee, Person
+
 
 def clear():
     os.system('cls') if os.name == 'nt' else os.system('clear')
+
+
+def get_dep_name():
+    return input('Введите название отдела - ')
+
+
+def get_employee_data() -> dict:
+    first_name: str = input('Имя - ')
+    last_name: str = input('Фамилия - ')
+    birth_at: list = list(map(int, input('Дата рождения: гггг-мм-дд - ').replace(' ', '').split('-')))
+    dep_name: str = input('Название отдела - ')
+    position: str = input('Должность - ')
+    profit: float = float(input('Оклад - '))
+    return {
+        'first_name': first_name,
+        'last_name': last_name,
+        'birth_at': birth_at,
+        'dep_name': dep_name,
+        'position': position,
+        'profit': profit
+    }
+
+
+def view_department_list(dep_list: list):
+    for i, dep in enumerate(dep_list, 1):
+        print(f'{i}. {dep}')
 
 
 def continue_question():
@@ -14,46 +42,23 @@ def continue_question():
             exit()
 
 
-def view_result(res):
-    result = res.fetchall()
-    if len(result) == 0:
-        print('Записей нет.')
-    else:
-        print(result)
-        print(type(result))
-        print('\nРезультат: \n')
-        for i in result:
-            print(i)
-        print()
+def success():
+    print('Операция успешно выполнена.')
 
 
-def filter_input(value):
-    return input(f'Введите {"фамилию/имя" if value == "2" else "город"} - ').strip().lower()
-
-
-def get_id():
-    while True:
-        idx = input('Введите id записи или q для отмены - ')
-        if idx.strip().isdigit() or idx.lower().strip() == 'q' or idx.lower().strip() == 'й':
-            return idx
-        print('Не верный ввод. Повторите.')
-
-
-def get_new_data() -> dict:
-    row = {'name': '', 'phone': '', 'city': ''}
-    while not row['name']:
-        row['name'] = input('Введите имя/фамилию (поле не может быть пустым) - ')
-    while not row['phone']:
-        row['phone'] = input('Введите номер телефона (поле не может быть пустым) - ')
-
-        row['city'] = input('Введите номер город (необязательное поле - ')
-
-    return row
+def print_employees(employees: list[Employee], cb_get_person_by_id):
+    for e in employees:
+        p: Person = cb_get_person_by_id(e.person_idx)
+        print(f'Номер: {e.person_idx} Имя: {p.first_name} '
+              f'Фамилия: {p.last_name} Год рождения: {p.birth_at[0]} '
+              f'Должность: {e.position} '
+              f'Отдел: {e.department.name} Оклад: {e.profit} Нанят с: {e.hired_from}')
 
 
 def main_menu():
-    print('__________ ТЕЛЕФОННЫЙ СПРАВОЧНИК __________\n')
+    print('__________ База персонала __________\n')
     print('__________ ВВЕДИТЕ КОМАНДУ __________')
-    print('1 - вывести все записи. 2 - фильтровать по имени/фамилии. 3 - фильтровать по городу. \n'
-          '4 - добавить новую запись. 5 - удалить запись по id. 6. Экспорт справочника в csv.  q/quit - выход.')
+    print(
+        '1 - вывести всех служащих. 2. вывести список отделов.\n'
+        '3 - фильтровать по отделу. 4 - добавить сотрудника.  q/quit - выход.')
     return input().strip().lower()

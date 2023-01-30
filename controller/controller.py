@@ -1,54 +1,32 @@
-import sqlite3
-
-import model.model as m
-import view.view as v
+from model.model import init, add_new_employee, get_employees_by_dep, get_department_list, get_all_employees, \
+    get_person_by_id
+from view.view import get_employee_data, view_department_list, clear, main_menu, continue_question, success, \
+    print_employees, get_dep_name
 
 
 def main():
-    cur, con = m.init()
-    m.create_table(cur, con)
+    init()
     while True:
-        v.clear()
-        value = v.main_menu()
+        clear()
+        value = main_menu()
         match value:
             case 'q' | 'quit' | 'й' | 'йгше':
-                v.clear()
+                clear()
                 exit()
             case '1':
-                v.clear()
-                v.view_result(m.select_all(cur))
-                v.continue_question()
+                print_employees(get_all_employees(), get_person_by_id)
+                continue_question()
             case '2':
-                filter_p = v.filter_input(value)
-                v.view_result(m.select_by_filter(cur, filter_p, value))
-                v.continue_question()
+                view_department_list(get_department_list())
+                continue_question()
             case '3':
-                filter_p = v.filter_input(value)
-                v.view_result(m.select_by_filter(cur, filter_p, value))
-                v.continue_question()
+                dep_name = get_dep_name()
+                print_employees(get_employees_by_dep(dep_name), get_person_by_id)
+                continue_question()
             case '4':
-                while True:
-                    try:
-                        row = v.get_new_data()
-                        m.add_row(cur, row, con)
-                        break
-                    except sqlite3.IntegrityError:
-                        v.clear()
-                        print('\nТакой номер уже существует.')
-                        print('Повторите ввод.')
-
-                print('\nНовая запись добавлена.\n')
-                v.continue_question()
-            case '5':
-                idx = v.get_id()
-                if idx.strip().isdigit():
-                    m.delete_row(cur, con, idx)
-                    print('Запись удалена.')
-                    v.continue_question()
-            case '6':
-                db = m.select_all(cur)
-                m.export_to_csv(db)
-                print('Экспорт завершен.')
-                v.continue_question()
+                data = get_employee_data()
+                add_new_employee(data)
+                success()
+                continue_question()
             case _:
                 print("Неверный выбор!")
