@@ -1,10 +1,8 @@
-
 import time
-
 
 from aiogram import Bot, Dispatcher
 from aiogram.filters import Command
-from aiogram.types import Message, CallbackQuery
+from aiogram.types import Message, CallbackQuery, Update
 
 from tic_tac_toe.filter import IsMoveFilter, LetsPlayFilter, DontPlayFilter
 from tic_tac_toe.game_func import check_desk, reset_board
@@ -13,10 +11,7 @@ from tic_tac_toe.keyboard import create_keyboard
 API_TOKEN: str = 'TELEGRAM_TOKEN'
 bot: Bot = Bot(token=API_TOKEN)
 dp: Dispatcher = Dispatcher()
-board: list = [['.' for _ in range(3)] for _ in range(3)]
-
-move = ['X']
-count = [0]
+db: dict = {}
 
 
 @dp.message(Command(commands=["start"]))
@@ -24,6 +19,12 @@ async def process_start_command(message: Message):
     await message.answer('Привет!\nЯ бот!\n'
                          'Я умею играть в крестики-нолики. '
                          '\nСыграем? Да или нет?')
+    if message.from_user.id not in db:
+        db.setdefault(message.from_user.id, {
+            'board': [['\U0001F60E' for _ in range(3)] for _ in range(3)],
+            'move': '\U0000274c',
+            'count': 0
+        })
 
 
 # Этот хэндлер будет срабатывать на команду "/help"
@@ -37,42 +38,45 @@ async def process_help_command(message: Message):
 
 @dp.message(LetsPlayFilter())
 async def process_help_command(message: Message):
-    await message.answer(f'Начинаем. Ходит {move[0]}',
-                         reply_markup=create_keyboard(board))
+    await message.answer(f'Начинаем. Ходит {db[message.from_user.id]["move"]}',
+                         reply_markup=create_keyboard(db[message.from_user.id]["board"]))
 
 
 @dp.message(DontPlayFilter())
 async def process_help_command(message: Message):
     time.sleep(1)
-    reset_board(board)
-    count[0] = 0
-    move[0] = 'X'
-    await message.answer('Жаль((. Но если, что зовите - поиграем :). ')
+    reset_board(db[message.from_user.id]["board"])
+    db[message.from_user.id]["count"] = 0
+    db[message.from_user.id]["move"] = '\U0000274c'
+    await message.answer('Жаль \U0001F614. Но если, что зовите - поиграем \U0001F609. ')
 
 
 @dp.callback_query(IsMoveFilter())
-async def button_1(callback: CallbackQuery):
+async def button(callback: CallbackQuery):
     i = int(callback.data[0])
     j = int(callback.data[1])
-    if board[i][j] == '.':
-        board[i][j] = move[0]
-        count[0] += 1
-        if check_desk(board, move[0]):
+    if db[callback.from_user.id]["board"][i][j] == '\U0001F60E':
+        db[callback.from_user.id]["board"][i][j] = db[callback.from_user.id]["move"]
+        db[callback.from_user.id]["count"] += 1
+        if check_desk(db[callback.from_user.id]["board"], db[callback.from_user.id]["move"]):
             time.sleep(1)
-            reset_board(board)
-            count[0] = 0
-            move[0] = 'X'
-            await callback.message.edit_text(f'Ура! Победил {move[0]}. Повторим?')
+            reset_board(db[callback.from_user.id]["board"])
+            db[callback.from_user.id]["count"] = 0
+            await callback.message.edit_text(f'Ура! Победил {db[callback.from_user.id]["move"]}. Повторим?')
+            db[callback.from_user.id]["move"] = '\U0000274c'
+
         else:
-            if count[0] < 9:
-                move[0] = 'X' if move[0] == 'O' else 'O'
-                await callback.message.edit_text(f'Ходит {move[0]}', reply_markup=create_keyboard(board))
+            if db[callback.from_user.id]["count"] < 9:
+                db[callback.from_user.id]["move"] = '\U0000274c' if db[callback.from_user.id][
+                                                                        "move"] == '\U00002b55' else '\U00002b55'
+                await callback.message.edit_text(f'Ходит {db[callback.from_user.id]["move"]}',
+                                                 reply_markup=create_keyboard(db[callback.from_user.id]["board"]))
             else:
                 time.sleep(1)
                 await callback.message.edit_text('Ничья! Победила дружба). Повторим?')
-                count[0] = 0
-                move[0] = 'X'
-                reset_board(board)
+                db[callback.from_user.id]["count"] = 0
+                db[callback.from_user.id]["move"] = '\U0000274c'
+                reset_board(db[callback.from_user.id]["board"])
         await callback.answer()
     else:
         await callback.answer()

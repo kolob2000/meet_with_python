@@ -1,6 +1,5 @@
 def check_desk(desk: list, symbol: str) -> bool:
     for i in range(3):
-        print(desk[i])
         if desk[i].count(symbol) == 3:
             return True
         elif [desk[0][i], desk[1][i], desk[2][i]].count(symbol) == 3:
@@ -15,4 +14,4 @@ def check_desk(desk: list, symbol: str) -> bool:
 def reset_board(board: list):
     for i in range(3):
         for j in range(3):
-            board[i][j] = '.'
+            board[i][j] = '\U0001F60E'
