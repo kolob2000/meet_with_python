@@ -14,7 +14,7 @@ class IsMoveFilter(BaseFilter):
 class LetsPlayFilter(BaseFilter):
     async def __call__(self, message: Message):
         try:
-            approval = ['ok', 'yes', 'да', 'ок', 'сыграем', 'давай', 'game', 'игра']
+            approval = ['/game', 'ok', 'yes', 'да', 'ок', 'сыграем', 'давай', 'game', 'игра']
             return message.text.lower() in approval
         except:
             return False

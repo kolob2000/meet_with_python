@@ -10,7 +10,7 @@ from tic_tac_toe.filter import IsMoveFilter, LetsPlayFilter, DontPlayFilter
 from tic_tac_toe.game_func import check_desk, reset_board
 from tic_tac_toe.keyboard import create_keyboard
 
-API_TOKEN: str = 'YOUR_TOKEN'
+API_TOKEN: str = 'TELEGRAM_TOKEN'
 bot: Bot = Bot(token=API_TOKEN)
 dp: Dispatcher = Dispatcher()
 board: list = [['.' for _ in range(3)] for _ in range(3)]
@@ -35,9 +35,9 @@ async def process_help_command(message: Message):
                          'для выхода из игры команда /cancel.')
 
 
-@dp.message(Command(commands=['game']))
+@dp.message(LetsPlayFilter())
 async def process_help_command(message: Message):
-    await message.answer('Начинаем',
+    await message.answer(f'Начинаем. Ходит {move[0]}',
                          reply_markup=create_keyboard(board))
 
 
@@ -48,12 +48,6 @@ async def process_help_command(message: Message):
     count[0] = 0
     move[0] = 'X'
     await message.answer('Жаль((. Но если, что зовите - поиграем :). ')
-
-
-@dp.message(LetsPlayFilter())
-async def process_help_command(message: Message):
-    await message.answer('Начинаем',
-                         reply_markup=create_keyboard(board))
 
 
 @dp.callback_query(IsMoveFilter())
