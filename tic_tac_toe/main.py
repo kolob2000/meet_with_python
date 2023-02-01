@@ -1,10 +1,10 @@
-import json
-import time
-from asyncio import sleep
 
-from aiogram import Bot, Dispatcher, F
-from aiogram.filters import Command, Text, Filter
-from aiogram.types import Message, ContentType, InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery
+import time
+
+
+from aiogram import Bot, Dispatcher
+from aiogram.filters import Command
+from aiogram.types import Message, CallbackQuery
 
 from tic_tac_toe.filter import IsMoveFilter, LetsPlayFilter, DontPlayFilter
 from tic_tac_toe.game_func import check_desk, reset_board
