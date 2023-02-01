@@ -1,4 +1,5 @@
-from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
+from aiogram import Bot
+from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup, BotCommand
 
 
 def create_keyboard(board: list) -> InlineKeyboardMarkup:
@@ -17,3 +18,15 @@ def create_keyboard(board: list) -> InlineKeyboardMarkup:
         [b4, b5, b6],
         [b7, b8, b9],
     ])
+
+
+async def set_main_menu(bot: Bot):
+    # Создаем список с командами для кнопки menu
+    print('Bot working...')
+    main_menu_commands = [
+        BotCommand(command='/start', description='Начать работу боту'),
+        BotCommand(command='/help', description='Справка по работе бота'),
+        BotCommand(command='/game', description='Сыграть в крестики-нолики'),
+        BotCommand(command='/cancel', description='Сбросить игру'),
+    ]
+    await bot.set_my_commands(main_menu_commands)

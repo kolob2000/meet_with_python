@@ -1,3 +1,5 @@
+import os
+import pickle
 import time
 
 from aiogram import Bot, Dispatcher
@@ -5,13 +7,16 @@ from aiogram.filters import Command
 from aiogram.types import Message, CallbackQuery, Update, BotCommand
 
 from tic_tac_toe.filter import IsMoveFilter, LetsPlayFilter, DontPlayFilter
-from tic_tac_toe.game_func import check_desk, reset_board
-from tic_tac_toe.keyboard import create_keyboard
+from tic_tac_toe.game_func import check_desk, reset_board, init
+from tic_tac_toe.keyboard import create_keyboard, set_main_menu
 
-API_TOKEN: str = 'TELEGRAM_TOKEN'
+API_TOKEN: str = '5662299299:AAFQbWDl9nQuv9UkggT8taef07GPvbNeobA'
 bot: Bot = Bot(token=API_TOKEN)
 dp: Dispatcher = Dispatcher()
 db: dict = {}
+if os.path.exists('db.dat'):
+    with open('db.dat', 'rb') as f:
+        db = pickle.load(f)
 
 
 @dp.message(Command(commands=["start"]))
@@ -92,20 +97,15 @@ async def button(callback: CallbackQuery):
 
 
 @dp.startup()
-async def set_main_menu(bot: Bot):
-    # Создаем список с командами для кнопки menu
-    print('Bot working...')
-    main_menu_commands = [
-        BotCommand(command='/start', description='Начать работу боту'),
-        BotCommand(command='/help', description='Справка по работе бота'),
-        BotCommand(command='/game', description='Сыграть в крестики-нолики'),
-        BotCommand(command='/cancel', description='Сбросить игру'),
-    ]
-    await bot.set_my_commands(main_menu_commands)
+async def start_bot(bot: Bot):
+    print(db)
+    await set_main_menu(bot)
 
 
 @dp.shutdown()
 async def stop_bot(bot: Bot):
+    with open('db.dat', 'wb+') as f:
+        pickle.dump(db, f)
     print('Bot stop.')
 
 
