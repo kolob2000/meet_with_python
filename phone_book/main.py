@@ -10,7 +10,7 @@ from phone_book.forms import add_new_contact, get_name, get_phone_number, get_ci
 from phone_book.main_menu import set_main_menu
 from phone_book.state_forms import ContactForm
 
-API_TOKEN: str = '5662299299:AAGzX_k5LCFx24VyISLsxbB1X_ZLsuxZO78'
+API_TOKEN: str = 'TELEGRAM_TOKEN'
 bot: Bot = Bot(token=API_TOKEN)
 dp: Dispatcher = Dispatcher()
 
