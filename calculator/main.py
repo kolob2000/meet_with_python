@@ -32,8 +32,7 @@ dp.callback_query.register(calculator, CalculateForm.FIRST_OPERAND)
 async def start(message: Message):
     await message.answer('Привет. Я бот-калькулятор.\n'
                          'Умею работать с вещественными числами.\n'
-                         'В будущем буду и с комплексными. Наверное.'
-                         'Но пока работаю только с двумя операндами.\n'
+                         'В будущем буду и с комплексными. Наверное.\n'
                          'Для деталей наберите команду   <b>/help</b>', parse_mode='HTML')
 
 
