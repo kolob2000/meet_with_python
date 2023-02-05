@@ -34,10 +34,9 @@ async def cancel_calculation(message: Message, state: FSMContext, bot: Bot):
 async def calculator(callback: CallbackQuery):
     operands = operands_db[f'{callback.from_user.id}']
     if callback.data == 'clear':
-        if len(operands['first_op'][1]) or len(operands['second_op'][1]):
-            clear_state(operands)
-            await callback.message.edit_text(f'res >\ninp >', reply_markup=create_keyboard())
-        await callback.answer()
+        clear_state(operands)
+        await callback.message.delete()
+        await callback.message.answer(f'res >\ninp >', reply_markup=create_keyboard())
     elif callback.data == 'empty':
         await callback.answer()
     elif callback.data == '=':
