@@ -3,7 +3,7 @@ from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton, BotCommand
 
 
 def create_keyboard() -> InlineKeyboardMarkup:
-    b_reset = InlineKeyboardButton(text='>>', callback_data='C')
+    b_reset = InlineKeyboardButton(text='<<', callback_data='C')
     b_clear = InlineKeyboardButton(text='C', callback_data='clear')
     b_empty = InlineKeyboardButton(text=' ', callback_data='empty')
     b1 = InlineKeyboardButton(text='1', callback_data='1')
